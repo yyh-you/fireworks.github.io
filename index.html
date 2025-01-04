@@ -1,69 +1,288 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>烟花秀</title>
-		<link rel="stylesheet" href="firework.css">
-	</head>
-	<body>
-		<div class="wrapper">
-			<div class="wrapper-display">
-				<p id="time">距离2022还有: 10时50分30秒</p>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>	<br>
-				<br>
-				<br>
-				<p id="time">王乃浪新年快乐</p>
-			</div>
-			<span></span>
-			<span></span>
-		</div>
-	
-		<canvas id="canvas"></canvas>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <title>星空艺术字</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            overflow: hidden;
+        }
+
+        /* 星空动画 */
+        @keyframes twinkle {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes shooting-star {
+            0% {
+                transform: translateX(0) translateY(0) rotate(-45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-500px) translateY(500px) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 1s infinite;
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #fff, transparent);
+            animation: shooting-star 2s linear infinite;
+        }
+
+        /* 文字容器 */
+        .text-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        /* 粒子文字效果 */
+        .particle-text {
+            font-size: 4em;
+            color: #ffffff;
+            text-shadow: 0 0 10px #ffffff,
+                         0 0 20px #ffffff,
+                         0 0 30px #ffffff;
+            opacity: 0.8;
+            font-family: 'Arial', sans-serif;
+            letter-spacing: 5px;
+        }
+
+        .particle {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="text-container">
+        <div class="particle-text">考试加油，you can do it,孙静茹!</div>
+    </div>
+
+    <script>
+        // 创建星星
+        function createStars() {
+            const stars = document.querySelector('.stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                stars.appendChild(star);
+            }
+        }
+
+        // 创建流星
+        function createShootingStar() {
+            const stars = document.querySelector('.stars');
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'shooting-star';
+            shootingStar.style.top = `${Math.random() * 50}%`;
+            shootingStar.style.right = '0';
+            stars.appendChild(shootingStar);
+
+            shootingStar.addEventListener('animationend', () => {
+                shootingStar.remove();
+            });
+        }
+
+        // 文字粒子效果
+        function createParticles(event) {
+            const text = document.querySelector('.particle-text');
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const x = event.clientX;
+            const y = event.clientY;
+            
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.width = '2px';
+            particle.style.height = '2px';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 1000);
+        }
+
+        // 初始化
+        createStars();
+        setInterval(createShootingStar, 3000);
+        
+        document.addEventListener('mousemove', createParticles);
+    </script>
+</body>
 </html>
-<script src="firework2.js"></script>
+// ... existing code ...
+
+/* 星空动画 */
+@keyframes twinkle {
+    0% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0.3; transform: scale(0.8); }
+}
+
+.star {
+    position: absolute;
+    width: 3px;  /* 增大星星尺寸 */
+    height: 3px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 2s infinite ease-in-out;  /* 调整动画时间和缓动效果 */
+    box-shadow: 0 0 4px #fff;  /* 添加发光效果 */
+}
+
+// ... existing code ...
+
 <script>
-	
-	let time = document.getElementById('time')
-	
-	
-	function getTimeTo2022(){
-		let curr = new Date()
-		let hours = curr.getHours()
-		let minutes = curr.getMinutes()
-		let seconds = curr.getSeconds()
-		
-		let totsec = seconds + minutes * 60 + hours * 60 * 60
-		
-		totsec = 60 * 60 * 24 - totsec
-		
-		hours = Math.floor(totsec / 3600)
-		minutes = Math.floor(totsec / 60 % 60)
-		seconds = Math.floor(totsec % 60)
-		
-		console.log(hours,minutes,seconds)
-		
-		return `${hours}时${minutes}分${seconds}秒`
-	}
-	
-	setInterval(refreshClock,1000)
-	
-	refreshClock()
-	function refreshClock(){
-		let date = new Date()
-		let curr = date.getFullYear() * 10000 + date.getMonth() * 100 + date.getDate()
-		let targ = 20250100
-		// console.log(curr)
-		if(curr < targ){
-			time.innerText = '新年快乐！'
-		}else{
-			time.innerText = '距离2025年还有:' + getTimeTo2022()
-		}
-		time.innerText = '距离2025年还有:' + getTimeTo2022()
-	}
+    // 创建星星
+    function createStars() {
+        const stars = document.querySelector('.stars');
+        for (let i = 0; i < 300; i++) {  // 增加星星数量
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // 更随机的位置分布
+            const randomSize = Math.random() * 3 + 1;  // 1-4px的随机大小
+            star.style.width = `${randomSize}px`;
+            star.style.height = `${randomSize}px`;
+            
+            // 使用更大范围的随机位置
+            star.style.left = `${Math.random() * 120 - 10}%`;  // -10% 到 110%
+            star.style.top = `${Math.random() * 120 - 10}%`;   // -10% 到 110%
+            
+            // 随机动画延迟和持续时间
+            star.style.animationDelay = `${Math.random() * 3}s`;
+            star.style.animationDuration = `${Math.random() * 3 + 1}s`;  // 1-4s的随机动画时间
+            
+            stars.appendChild(star);
+        }
+    }
+
+    // 创建多个流星
+    function createMultipleShootingStars() {
+        const count = Math.floor(Math.random() * 3) + 1;  // 随机创建1-3颗流星
+        for (let i = 0; i < count; i++) {
+            setTimeout(() => createShootingStar(), i * 300);  // 间隔300ms创建流星
+        }
+    }
+
+    // 初始化
+    createStars();
+    setInterval(createMultipleShootingStars, 2000);  // 每2秒触发一次流星群
+    
+    // ... rest of the code ...
+</script>
+/* 流星动画 */
+@keyframes shooting-star {
+    0% {
+        transform: translateX(200px) translateY(-200px) rotate(-45deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-200vh) translateY(200vh) rotate(-45deg);
+        opacity: 0;
+    }
+}
+
+.shooting-star {
+    position: absolute;
+    width: 150px;  /* 增加流星长度 */
+    height: 2px;
+    /* 添加多彩流星效果 */
+    background: linear-gradient(90deg, 
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.3) 30%,
+        rgba(255,255,255,1) 50%,
+        rgba(240,240,255,1) 70%,
+        rgba(70,120,255,0.3) 80%,
+        rgba(70,120,255,0) 100%
+    );
+    animation: shooting-star 3s linear;  /* 增加动画时间 */
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);  /* 添加发光效果 */
+}
+
+// ... existing code ...
+
+<script>
+    // 创建流星
+    function createShootingStar() {
+        const stars = document.querySelector('.stars');
+        const shootingStar = document.createElement('div');
+        shootingStar.className = 'shooting-star';
+        
+        // 随机起始位置
+        const startX = Math.random() * window.innerWidth;
+        shootingStar.style.top = '-100px';  // 从屏幕顶部开始
+        shootingStar.style.left = `${startX}px`;
+        
+        // 随机选择流星颜色
+        const colors = [
+            'rgba(255,255,255,1)',  // 白色
+            'rgba(70,120,255,1)',   // 蓝色
+            'rgba(255,220,220,1)',  // 粉色
+        ];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        shootingStar.style.background = `linear-gradient(90deg, 
+            rgba(255,255,255,0) 0%,
+            ${randomColor.replace('1)', '0.3)')} 30%,
+            ${randomColor} 50%,
+            ${randomColor} 70%,
+            ${randomColor.replace('1)', '0.3)')} 80%,
+            rgba(255,255,255,0) 100%
+        )`;
+
+        stars.appendChild(shootingStar);
+
+        shootingStar.addEventListener('animationend', () => {
+            shootingStar.remove();
+        });
+    }
+
+    // 创建多个流星
+    function createMultipleShootingStars() {
+        const count = Math.floor(Math.random() * 2) + 1;  // 随机创建1-2颗流星
+        for (let i = 0; i < count; i++) {
+            setTimeout(() => createShootingStar(), i * 500);  // 间隔500ms创建流星
+        }
+    }
+
+    // 初始化
+    createStars();
+    setInterval(createMultipleShootingStars, 4000);  // 每4秒触发一次流星群
 </script>
